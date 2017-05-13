@@ -17,7 +17,7 @@
         var autoscroll_options = {};
         for (var option in options) {
           if (option.indexOf('autoscroll') == 0) {
-            var param_name = option.replace('autoscroll', '');
+            var param_name = option.replace('autoscroll', '').toLowerCase();
             autoscroll_options[param_name] = options[option];
             delete options[option];
           }
@@ -132,7 +132,6 @@
   };
 
   Drupal.jcarousel.reloadCallback = function (event, carousel) {
-    console.log('reload');
     // Set the clip and container to auto width so that they will fill
     // the available space.
     var width = carousel.innerWidth();
@@ -177,13 +176,10 @@
      * Sets the throbber progress indicator.
      */
     Drupal.Ajax.prototype.setProgressIndicatorJcarousel = function () {
-      console.log('progress');
-      console.log(this);
       var jCarousel = $(this.element_settings.selector).find('[data-jcarousel]');
       this.progress.element = $('<li><div class="ajax-progress ajax-progress-throbber ajax-progress-jcarousel"><div class="throbber">&nbsp;</div></div></li>');
       jCarousel.jcarousel('list').append(this.progress.element);
       jCarousel.jcarousel('reload');
-      console.log(jCarousel.jcarousel('items').size());
       if (this.progress.message) {
         this.progress.element.find('.throbber').after('<div class="message">' + this.progress.message + '</div>');
       }
