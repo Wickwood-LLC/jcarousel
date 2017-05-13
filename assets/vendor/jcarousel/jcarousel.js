@@ -12,12 +12,23 @@
 
         // Analyze options.
         var options = $(this).data();
+        // Drop special jQuery Once attr from options.
+        delete options.jqueryOnceJcarousel;
         var events = options.events;
         delete options.events;
+        // jCarousel support only low case options like interval but $.data()
+        // convert autoscroll-interval data attribute to autoscrollInterval option name.
+        for (var option in options) {
+          var lowcase_option_name = option.toLowerCase();
+          if (lowcase_option_name !== option){
+            options[lowcase_option_name] = options[option];
+            delete options[option];
+          }
+        }
         var autoscroll_options = {};
         for (var option in options) {
           if (option.indexOf('autoscroll') == 0) {
-            var param_name = option.replace('autoscroll', '').toLowerCase();
+            var param_name = option.replace('autoscroll', '');
             autoscroll_options[param_name] = options[option];
             delete options[option];
           }
