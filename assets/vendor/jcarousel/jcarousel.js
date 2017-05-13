@@ -72,6 +72,16 @@
           var options = $(this).data();
           var events = options.events;
           delete options.events;
+          for (var option in options) {
+            var lowcase_option_name = option.toLowerCase();
+            if (lowcase_option_name !== option){
+              options[lowcase_option_name] = options[option];
+              delete options[option];
+            }
+          }
+          if ($.inArray(options.target, ['-=', '+=']) > -1) {
+            options.target += instance.jcarousel('fullyvisible').length;
+          }
           var control = $(this).jcarouselControl(options);
 
           Drupal.jcarousel.attachEvents(events, control);
