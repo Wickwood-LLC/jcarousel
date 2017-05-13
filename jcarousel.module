@@ -615,11 +615,14 @@ function _jcarousel_generate_attributes($items, $options) {
   // Scroll all visible elements at a time if scroll = 'auto'
   $scroll = !empty($options['scroll']) ? $options['scroll'] : $options['visible'];
 
-  if ($options['auto'] > 0 && $options['autoPause'] && empty($options['events']['jcarousel']['jcarousel:createend'])) {
-    $options['events']['jcarousel']['jcarousel:createend'] = 'jcarousel.autoPauseCallback';
+  if ($options['auto'] > 0) {
     $attributes['attributes']->setAttribute('data-autoscroll-interval', $options['auto'] * 1000);
     $attributes['attributes']->setAttribute('data-autoscroll-autostart', 'true');
     $attributes['attributes']->setAttribute('data-autoscroll-target', '+=' . $scroll);
+
+    if ($options['autoPause'] && empty($options['events']['jcarousel']['jcarousel:createend'])) {
+      $options['events']['jcarousel']['jcarousel:createend'] = 'jcarousel.autoPauseCallback';
+    }
   }
 
   if ($options['responsive'] && empty($options['events']['jcarousel']['jcarousel:reload'])) {
