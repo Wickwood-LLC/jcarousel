@@ -672,7 +672,7 @@ function _jcarousel_generate_attributes($items, $options) {
 
   $attributes['attributes_wrapper']->addClass('jcarousel-wrapper');
 
-  if ($options['visible']) {
+  if (!empty($options['visible'])) {
     $attributes['attributes_wrapper']->addClass('jcarousel-visible-' . $options['visible']);
   }
 
