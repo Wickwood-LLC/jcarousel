@@ -1,15 +1,26 @@
 jcarousel:
   remote: http://sorgalla.com/jcarousel/dist/jquery.jcarousel.min.js
-  version: 0.3.4
+  version: 0.3.5
   license:
     name: MIT
-    url: https://github.com/jsor/jcarousel/blob/0.3.4/LICENSE
+    url: https://github.com/jsor/jcarousel/blob/0.3.5/LICENSE
+    gpl-compatible: true
+  js: {}
+  dependencies:
+    - core/jquery
+
+drupal.jcarousel:
+  remote: http://sorgalla.com/jcarousel/dist/jquery.jcarousel.min.js
+  version: 0.3.5
+  license:
+    name: MIT
+    url: https://github.com/jsor/jcarousel/blob/0.3.5/LICENSE
     gpl-compatible: true
   js:
-    assets/vendor/jcarousel/jquery.jcarousel.min.js: {}
-    assets/vendor/jcarousel/jcarousel.js: {}
+    js/jcarousel.js: {}
   dependencies:
     - core/jquery
     - core/drupal
     - core/jquery.once
     - core/drupalSettings
+    - jcarousel/jcarousel

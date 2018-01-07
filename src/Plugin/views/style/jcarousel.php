@@ -220,6 +220,7 @@ class jcarousel extends style\StylePluginBase {
 
     $skin = !empty($this->options['skin']) ? $this->options['skin'] : 'default';
     $this->view->element['#attached']['library'][] = 'jcarousel/jcarousel';
+    $this->view->element['#attached']['library'][] = 'jcarousel/drupal.jcarousel';
     $this->view->element['#attached']['library'][] = 'jcarousel/skin.' . $skin;
   }
 
