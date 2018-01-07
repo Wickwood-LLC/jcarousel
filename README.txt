@@ -57,6 +57,16 @@ Installation
   Note: the requirement on the library is not in the module's composer.json
   because that would cause problems with automated testing.
 
+-- INSTALLATION VIA DRUSH --
+
+  A Drush command is provided for easy installation of the jCarousel plugin.
+
+  drush jcarouselplugin
+
+  The command will download the plugin and unpack it in "libraries".
+  It is possible to add another path as an option to the command, but not
+  recommended unless you know what you are doing.
+
 -- MANUAL INSTALLATION --
 1) Place this module directory in your modules folder (this will usually be
    "modules/contrib").

@@ -26,7 +26,7 @@ function jcarousel_requirements($phase) {
           'title' => t('jCarousel JavaScript file'),
           'value' => t('Not Installed'),
           'severity' => REQUIREMENT_ERROR,
-          'description' => t('You need to <a href="@url">download</a> the @jcarousel and extract the entire contents of the archive into the %path directory in your Drupal installation directory.', ['@jcarousel' => $link, '%path' => 'libraries/jcarousel', '@url' => 'https://github.com/jsor/jcarousel/releases/latest']),
+          'description' => t('You need to <a href=":url">download</a> the @jcarousel and extract the entire contents of the archive into the %path directory in your Drupal installation directory.', ['@jcarousel' => $link, '%path' => 'libraries/jcarousel', ':url' => 'https://github.com/jsor/jcarousel/releases/latest']),
         );
       }
       else {
