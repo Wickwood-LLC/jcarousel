@@ -14,7 +14,7 @@ use Drupal\Core\Ajax\CommandWithAttachedAssetsTrait;
  * An AJAX command for adding jCarousel items dynamically.
  *
  * This command is implemented by Drupal.AjaxCommands.prototype.jcarousel_append()
- * defined in js/jcarousel.js.
+ * defined in jcarousel/assets/vendor/jcarousel/jcarousel.js.
  *
  * @see http://sorgalla.com/jcarousel/docs/reference/usage.html#manipulating-the-carousel
  *

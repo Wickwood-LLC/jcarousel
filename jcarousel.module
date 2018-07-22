@@ -4,13 +4,12 @@
  * @file
  * Provides integration with 3rd party modules and the jCarousel library.
  */
+use Drupal\Core\Asset;
 use Drupal\Core\Template\Attribute;
+use Drupal\jcarousel;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Url;
-
-define('JCAROUSEL_WEBSITE_URL', 'https://sorgalla.com/jcarousel/');
-
 
 /**
  * Implements hook_help().
@@ -258,7 +257,7 @@ function _jcarousel_help_skins() {
     <code><pre>
     myskin:
       label: 'My Skin'
-      file: skins/myskin/jcarousel-myskin.css
+      file: assets/vendor/jcarousel/skins/myskin/jcarousel-myskin.css
       weight: 1</pre></code>"),
   ];
 
@@ -493,7 +492,6 @@ function jcarousel_theme() {
 function jcarousel_add($options = []) {
   // Add the jCarousel library and any global settings.
   $attachments['library'][] = 'jcarousel/jcarousel';
-  $attachments['library'][] = 'jcarousel/drupal.jcarousel';
 
   $options += [
     'skin' => 'default',
@@ -513,31 +511,18 @@ function jcarousel_add($options = []) {
  * Add skins as libraries.
  */
 function jcarousel_library_info_alter(&$libraries, $extension) {
-  if ($extension != 'jcarousel') {
-    return;
-  }
-
-  if (isset($libraries['jcarousel'])) {
-    // Set jCarousel library path.
-    $jcarousel_js_path = _jcarousel_get_jcarousel_path();
-    $minified = file_exists($jcarousel_js_path . '/dist/jquery.jcarousel.min.js');
-    $jcarousel_js_path = '/' . $jcarousel_js_path;
-    $jcarousel_js = $minified
-      ? $jcarousel_js_path . '/dist/jquery.jcarousel.min.js'
-      : $jcarousel_js_path . '/dist/jquery.jcarousel.js';
-    $libraries['jcarousel']['js'][$jcarousel_js] = ['minified' => $minified];
-  }
-
-  $skins = \Drupal::service('jcarousel.skins.manager')->getDefinitions();
-  foreach ($skins as $key => $data) {
-    $libraries["skin.$key"] = [
-      'version' => 'VERSION',
-      'css' => [
-        'theme' => [
-          $data['file'] => [],
+  if ($extension == 'jcarousel') {
+    $skins = \Drupal::service('jcarousel.skins.manager')->getDefinitions();
+    foreach ($skins as $key => $data) {
+      $libraries["skin.$key"] = [
+        'version' => 'VERSION',
+        'css' => [
+          'theme' => [
+            $data['file'] => [],
+          ],
         ],
-      ],
-    ];
+      ];
+    }
   }
 }
 
@@ -558,7 +543,6 @@ function template_preprocess_jcarousel(&$variables) {
 
   // Add the jCarousel library and any global settings.
   $variables['#attached']['library'][] = 'jcarousel/jcarousel';
-  $variables['#attached']['library'][] = 'jcarousel/drupal.jcarousel';
 
   // Allow other modules to modify these settings.
   \Drupal::moduleHandler()->alter('jcarousel_options', $options, $class_name);
@@ -580,7 +564,7 @@ function template_preprocess_views_view_jcarousel(&$variables) {
   /** @var \Drupal\views\ViewExecutable $view */
   $view = &$variables['view'];
   $variables['options'] = $view->style_plugin->options;
-  $position = array_search('jcarousel/drupal.jcarousel', $view->element['#attached']['library']);
+  $position = array_search('jcarousel/jcarousel', $view->element['#attached']['library']);
   $library = array_splice($view->element['#attached']['library'], $position, 1);
   $view->element['#attached']['library'] = array_merge($view->element['#attached']['library'], $library);
 
@@ -726,7 +710,6 @@ function jcarousel_page_attachments(&$page) {
 
   // Add the jCarousel library and any global settings.
   $page['#attached']['library'][] = 'jcarousel/jcarousel';
-  $page['#attached']['library'][] = 'jcarousel/drupal.jcarousel';
 
   // Allow other modules to modify these settings.
   \Drupal::moduleHandler()->alter('jcarousel_options', $options, $class_name);
@@ -736,34 +719,4 @@ function jcarousel_page_attachments(&$page) {
   foreach ($skins as $id => $skin) {
     $variables['#attached']['library'][] = 'jcarousel/skin.' . $id;
   }
-}
-
-/**
- * Get the location of the jCarousel library.
- *
- * @return string
- *   The location of the library, or FALSE if the library isn't installed.
- */
-function _jcarousel_get_jcarousel_path() {
-    // The following logic is taken from libraries_get_libraries()
-    $searchdir = [];
-
-    // Similar to 'modules' and 'themes' directories inside an installation
-    // profile, installation profiles may want to place libraries into a
-    // 'libraries' directory.
-    $searchdir[] = 'profiles/' . \Drupal::installProfile() . '/libraries';
-
-    // Always search libraries.
-    $searchdir[] = 'libraries';
-
-    // Also search sites/<domain>/*.
-    $searchdir[] = \Drupal::service('site.path') . '/libraries';
-
-    foreach ($searchdir as $dir) {
-        if (file_exists($dir . '/jcarousel/dist/jquery.jcarousel.min.js') || file_exists($dir . 'jcarousel/dist/jquery.jcarousel.js')) {
-            return $dir . '/jcarousel';
-        }
-    }
-
-    return FALSE;
 }
